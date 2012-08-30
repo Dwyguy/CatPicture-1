@@ -8,6 +8,9 @@
 
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
+#include "cinder/ImageIo.h"
+#include "cinder/gl/Texture.h"
+#include "Resources.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -46,6 +49,8 @@ void CatPictureApp::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( brightness, brightness, brightness ) ); 
+	gl::Texture catPicture( loadImage( loadResource( RES_SNOWBOARD ) ) );
+	gl::draw(catPicture);
 }
 
 CINDER_APP_BASIC( CatPictureApp, RendererGl )
