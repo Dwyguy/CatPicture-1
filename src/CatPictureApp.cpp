@@ -1,3 +1,11 @@
+/**
+ * CatPictureApp.cpp
+ * A simple app that displays a picture of a cat
+ *
+ * @author Stevie Yakkel
+ * @Date 8/30/2012
+ */
+
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 
