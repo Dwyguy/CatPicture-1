@@ -30,7 +30,7 @@ class CatPictureApp : public AppBasic {
 	static const int appWidth=800;
 	static const int appHeight=600;
 	static const int textureSize=1024;
-	void rectangle(int x, int y, int width, int height, Color8u color, uint8_t* pixels);
+	void rectangle(int x1, int x2, int y1, int y2, int width, int height, Color8u color, uint8_t* pixels);
 	  
 };
 
@@ -43,17 +43,17 @@ void CatPictureApp::setup()
 	
 }
 
-void CatPictureApp::rectangle(int x, int y, int width, int height, Color8u color, uint8_t* pixels){
+void CatPictureApp::rectangle(int x1, int x2, int y1, int y2, int width, int height, Color8u color, uint8_t* pixels){
 
-	x = 0;
-	y = 0;
-	width = 1000;
-	height = 100;
+	x1 = 0;
+	x2 = 100;
+	y1 = 0;
+	y2 = 100;
 	Color8u c = Color8u(0,0,0);
-	for(x; x<width; x++){
-		pixels[3*x] = c.r;
-		pixels[3*x+1] = c.b;
-		pixels[3*x+2] = c.g;
+	for(x1; x1<x2; x1++){
+		pixels[3*x1] = c.r;
+		pixels[3*x1+1] = c.b;
+		pixels[3*x1+2] = c.g;
 
 	}
 }
