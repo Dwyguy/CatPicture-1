@@ -24,13 +24,38 @@ class CatPictureApp : public AppBasic {
 	void draw();
 
   private:
-	float brightness;
+	Surface* mySurface_;
+	uint8_t* pixels;
+	gl::Texture* myTexture_;
+	static const int appWidth=800;
+	static const int appHeight=600;
+	static const int textureSize=1024;
+	void rectangle(int x, int y, int width, int height, Color8u color, uint8_t* pixels);
 	  
 };
 
 void CatPictureApp::setup()
 {
-	brightness = 1.0f;
+	Surface cat_picture(loadImage( loadResource(RES_SNOWBOARD) ));
+	mySurface_ = new Surface(textureSize,textureSize,false);
+	myTexture_ = new gl::Texture(cat_picture);
+	uint8_t* pixels = cat_picture.getData();
+	
+}
+
+void CatPictureApp::rectangle(int x, int y, int width, int height, Color8u color, uint8_t* pixels){
+
+	x = 0;
+	y = 0;
+	width = 1000;
+	height = 100;
+	Color8u c = Color8u(0,0,0);
+	for(x; x<width; x++){
+		pixels[3*x] = c.r;
+		pixels[3*x+1] = c.b;
+		pixels[3*x+2] = c.g;
+
+	}
 }
 
 void CatPictureApp::mouseDown( MouseEvent event )
@@ -39,18 +64,13 @@ void CatPictureApp::mouseDown( MouseEvent event )
 
 void CatPictureApp::update()
 {
-	brightness = brightness - 0.01f;
-	if( brightness < 0.0f){
-		brightness = 1.0f;
-	}
+	
 }
 
 void CatPictureApp::draw()
 {
-	// clear out the window with black
-	gl::clear( Color( brightness, brightness, brightness ) ); 
-	gl::Texture catPicture( loadImage( loadResource( RES_SNOWBOARD ) ) );
-	gl::draw(catPicture);
+	
+	gl::draw(*myTexture_);
 }
 
 CINDER_APP_BASIC( CatPictureApp, RendererGl )
