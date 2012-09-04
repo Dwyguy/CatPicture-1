@@ -22,39 +22,81 @@ class CatPictureApp : public AppBasic {
 	void mouseDown( MouseEvent event );	
 	void update();
 	void draw();
+	void prepareSettings(Settings* settings);
 
   private:
 	Surface* mySurface_;
 	uint8_t* pixels;
 	gl::Texture* myTexture_;
+	Surface cat_picture;
 	static const int appWidth=800;
 	static const int appHeight=600;
 	static const int textureSize=1024;
-	void rectangle(int x1, int x2, int y1, int y2, int width, int height, Color8u color, uint8_t* pixels);
+	void rectangle(uint8_t* pixels, int x1, int x2, int y1, int y2, Color8u c);
+	void gradient(uint8_t* pixels, int x, int y);
 	  
 };
+
+void CatPictureApp::prepareSettings(Settings* settings){
+	(*settings).setWindowSize(appWidth,appHeight);
+	(*settings).setResizable(false);
+}
 
 void CatPictureApp::setup()
 {
 	Surface cat_picture(loadImage( loadResource(RES_SNOWBOARD) ));
 	mySurface_ = new Surface(textureSize,textureSize,false);
-	myTexture_ = new gl::Texture(cat_picture);
-	uint8_t* pixels = cat_picture.getData();
+	myTexture_ = new gl::Texture(*mySurface_);
+	uint8_t* pixelArray = (*mySurface_).getData();
 	
 }
 
-void CatPictureApp::rectangle(int x1, int x2, int y1, int y2, int width, int height, Color8u color, uint8_t* pixels){
+void CatPictureApp::gradient(uint8_t* pixels, int x, int y){
+	
+	Color8u c = Color8u(255,255,255);
+	
+	int z = 255;
+	int counter = 0;
+	for(int y = 0; y < textureSize; y++){
+		for(int x = 0; x < textureSize; x++){
+        
+		pixels[(3 * x) + (y * textureSize * 3 )] = c.r;
+		pixels[(3 * x) + (y * textureSize * 3) + 1] = c.g;
+		pixels[(3 * x) + (y * textureSize * 3) + 2] = c.b + z;
+		counter++;
+		if(counter == 4){
+			z--;
+			counter = 0;
+		}
+		}
+	}
+}
 
-	x1 = 0;
-	x2 = 100;
-	y1 = 0;
-	y2 = 100;
-	Color8u c = Color8u(0,0,0);
-	for(x1; x1<x2; x1++){
-		pixels[3*x1] = c.r;
-		pixels[3*x1+1] = c.b;
-		pixels[3*x1+2] = c.g;
+void CatPictureApp::rectangle(uint8_t* pixels, int x1, int x2, int y1, int y2, Color8u c){
 
+
+	int startx = (x1 < x2) ? x1 : x2;
+	int endx = (x1 < x2) ? x2 : x1;
+	int starty = (y1 < y2) ? y1 : y2;
+	int endy = (y1 < y2) ? y2 : y1;
+
+	if(endx < 0)
+		return; 
+	if(endy < 0) 
+		return; 
+	if(startx >= appWidth) 
+		return; 
+	if(starty >= appHeight) 
+		return;
+	if(endx >= appWidth) endx = appWidth - 1;
+	if(endy >= appHeight) endy = appHeight - 1;
+
+	for(int y = starty; y < endy; y++){
+		for(int x = startx; x < endx; x++){
+		pixels[(3 * x) + (y * textureSize * 3 )] = c.r;
+		pixels[(3 * x) + (y * textureSize * 3) + 1] = c.g;
+		pixels[(3 * x) + (y * textureSize * 3) + 2] = c.b;
+		}
 	}
 }
 
@@ -65,12 +107,17 @@ void CatPictureApp::mouseDown( MouseEvent event )
 void CatPictureApp::update()
 {
 	
+	uint8_t* pixelArray = (*mySurface_).getData();
+	gradient(pixelArray,0,0);
+	rectangle(pixelArray, 100, 200, 100, 200, Color8u(255,0,0));
+	
 }
 
 void CatPictureApp::draw()
 {
 	
-	gl::draw(*myTexture_);
+	gl::draw(*mySurface_);
+	
 }
 
 CINDER_APP_BASIC( CatPictureApp, RendererGl )
