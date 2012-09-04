@@ -34,6 +34,7 @@ class CatPictureApp : public AppBasic {
 	static const int textureSize=1024;
 	void rectangle(uint8_t* pixels, int x1, int x2, int y1, int y2, Color8u c);
 	void gradient(uint8_t* pixels, int x, int y);
+	void tint(uint8_t* pixels);
 	  
 };
 
@@ -51,12 +52,25 @@ void CatPictureApp::setup()
 	
 }
 
+void CatPictureApp::tint(uint8_t* pixels){
+
+
+	for(int y = 0; y < textureSize; y++){
+		for(int x = 0; x < textureSize; x++){
+		pixels[(3 * x) + (y * textureSize * 3 )];
+		pixels[(3 * x) + (y * textureSize * 3) + 1];
+		pixels[(3 * x) + (y * textureSize * 3) + 2];
+		}
+	}
+
+}
+
 void CatPictureApp::gradient(uint8_t* pixels, int x, int y){
 	
 	Color8u c = Color8u(0,0,0);
 	
 	for(int y = 0; y < textureSize; y++){
-		for(int x = 0; x < textureSize; x++){
+		for(int x = 0; x < appWidth; x++){
 
 			int num = (int)((256 * x) / appWidth);
         
@@ -106,6 +120,7 @@ void CatPictureApp::update()
 	uint8_t* pixelArray = (*mySurface_).getData();
 	gradient(pixelArray,0,0);
 	rectangle(pixelArray, 100, 200, 100, 200, Color8u(255,0,0));
+	//tint(pixelArray);
 	
 }
 
