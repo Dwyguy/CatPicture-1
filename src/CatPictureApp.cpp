@@ -53,21 +53,17 @@ void CatPictureApp::setup()
 
 void CatPictureApp::gradient(uint8_t* pixels, int x, int y){
 	
-	Color8u c = Color8u(255,255,255);
+	Color8u c = Color8u(0,0,0);
 	
-	int z = 255;
-	int counter = 0;
 	for(int y = 0; y < textureSize; y++){
 		for(int x = 0; x < textureSize; x++){
+
+			int num = (int)((256 * x) / appWidth);
         
 		pixels[(3 * x) + (y * textureSize * 3 )] = c.r;
 		pixels[(3 * x) + (y * textureSize * 3) + 1] = c.g;
-		pixels[(3 * x) + (y * textureSize * 3) + 2] = c.b + z;
-		counter++;
-		if(counter == 4){
-			z--;
-			counter = 0;
-		}
+		pixels[(3 * x) + (y * textureSize * 3) + 2] = c.b + num;
+		
 		}
 	}
 }
