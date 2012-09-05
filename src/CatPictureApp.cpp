@@ -31,6 +31,9 @@ class CatPictureApp : public AppBasic {
 	Surface cat_picture;
 	int leftEyeSize;
 	int rightEyeSize;
+	int eyeColor;
+	int movingx;
+	int movingy;
 	static const int appWidth=800;
 	static const int appHeight=600;
 	static const int textureSize=1024;
@@ -54,6 +57,9 @@ void CatPictureApp::setup(){
 	uint8_t* pixelArray = (*mySurface_).getData();
 	leftEyeSize = 30;
 	rightEyeSize = 40;
+	eyeColor = 255;
+	movingx = 25;
+	movingy = 25;
 	
 }
 
@@ -109,7 +115,7 @@ void CatPictureApp::triangle(uint8_t* pixels, int length, int x, int y, Color8u 
 
 void CatPictureApp::gradient(uint8_t* pixels, int x, int y){
 	
-	Color8u c = Color8u(0, 0, 0);
+	Color8u c = Color8u(255, 0, 0);
 	
 	for(int y = 0; y < textureSize; y++){
 		// starts from the top of the window
@@ -168,24 +174,41 @@ void CatPictureApp::update(){
 		leftEyeSize++;
 	else
 		leftEyeSize = 30;
-	// animates left eye
+	// animates size of left eye
+
+	if(eyeColor <= 255 && eyeColor != 0)
+		eyeColor--;
+	else
+		eyeColor = 255;
+	// animates color of both eyes
+
 	if(rightEyeSize > 30)
 		rightEyeSize--;
 	else
 		rightEyeSize = 40;
-	// animates right eye
+	// animates size of right eye
 
 	uint8_t* pixelArray = (*mySurface_).getData();
 	gradient(pixelArray, 0, 0);
-	triangle(pixelArray, 175, 370, 170, Color8u(175, 175, 175)); // right ear
-	triangle(pixelArray, 175, 250, 170, Color8u(175, 175, 175)); // left ear
+	triangle(pixelArray, 230, 350, 170, Color8u(175, 175, 175)); // right ear
+	triangle(pixelArray, 230, 230, 170, Color8u(175, 175, 175)); // left ear
 	circle(pixelArray, 175, 400, 300, Color8u(100, 100, 100)); // head
 	triangle(pixelArray, 55, 375, 300, Color8u(30, 30, 30)); // nose
-	circle(pixelArray, leftEyeSize, 250, 225, Color8u(70, 255, 70)); // left eye
-	circle(pixelArray, rightEyeSize, 550, 225, Color8u(70, 255, 70)); // right eye
+	circle(pixelArray, leftEyeSize, 250, 225, Color8u(0, 0, eyeColor)); // left eye
+	circle(pixelArray, rightEyeSize, 550, 225, Color8u(eyeColor, 0, 0)); // right eye
 	rectangle(pixelArray, 495, 520, 400, 450,Color8u(255,0,0)); // tounge
 	rectangle(pixelArray, 300, 525, 375, 400, Color8u(255,0,0)); // mouth
 
+	circle(pixelArray, 25, movingx, movingy, Color(255, 255, 255));
+
+	if((movingx < (appWidth - 25)) && (movingy < (appHeight - 25))) 
+		movingx = movingx + 25;
+	else if((movingx == (appWidth - 25)) && (movingy < (appHeight - 25))) 
+		movingy = movingy + 25;
+	else if((movingx <= (appWidth - 25)) && (movingy == (appHeight - 25)))
+		movingx = movingx - 25;
+	else
+		movingy = movingy - 25; 
 }
 
 void CatPictureApp::draw(){
