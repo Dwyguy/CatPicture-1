@@ -29,6 +29,8 @@ class CatPictureApp : public AppBasic {
 	uint8_t* pixels;
 	gl::Texture* myTexture_;
 	Surface cat_picture;
+	int leftEyeSize;
+	int rightEyeSize;
 	static const int appWidth=800;
 	static const int appHeight=600;
 	static const int textureSize=1024;
@@ -50,6 +52,8 @@ void CatPictureApp::setup(){
 	mySurface_ = new Surface(textureSize,textureSize,false);
 	myTexture_ = new gl::Texture(*mySurface_);
 	uint8_t* pixelArray = (*mySurface_).getData();
+	leftEyeSize = 30;
+	rightEyeSize = 40;
 	
 }
 
@@ -160,16 +164,28 @@ void CatPictureApp::mouseDown( MouseEvent event ){
 
 void CatPictureApp::update(){
 
+	if(leftEyeSize < 40)
+		leftEyeSize++;
+	else
+		leftEyeSize = 30;
+	// animates left eye
+	if(rightEyeSize > 30)
+		rightEyeSize--;
+	else
+		rightEyeSize = 40;
+	// animates right eye
+
 	uint8_t* pixelArray = (*mySurface_).getData();
 	gradient(pixelArray, 0, 0);
 	triangle(pixelArray, 175, 370, 170, Color8u(175, 175, 175)); // right ear
 	triangle(pixelArray, 175, 250, 170, Color8u(175, 175, 175)); // left ear
 	circle(pixelArray, 175, 400, 300, Color8u(100, 100, 100)); // head
 	triangle(pixelArray, 55, 375, 300, Color8u(30, 30, 30)); // nose
-	circle(pixelArray, 30, 250, 225, Color8u(70, 255, 70)); // left eye
-	circle(pixelArray, 40, 550, 225, Color8u(70, 255, 70)); // right eye
+	circle(pixelArray, leftEyeSize, 250, 225, Color8u(70, 255, 70)); // left eye
+	circle(pixelArray, rightEyeSize, 550, 225, Color8u(70, 255, 70)); // right eye
 	rectangle(pixelArray, 495, 520, 400, 450,Color8u(255,0,0)); // tounge
 	rectangle(pixelArray, 300, 525, 375, 400, Color8u(255,0,0)); // mouth
+
 }
 
 void CatPictureApp::draw(){
