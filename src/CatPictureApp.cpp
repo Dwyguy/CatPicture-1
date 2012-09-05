@@ -55,13 +55,13 @@ void CatPictureApp::setup()
 
 void CatPictureApp::circle(uint8_t* pixels, int radius, int centerx, int centery){
 
-	Color8u c = Color8u(0,255,0);
+	Color8u c = Color8u(0, 255, 0);
 
-	if(radius < 0)
+	if(radius <= 0)
 		return;
 
 	for(int y = centery - radius; y <= centery + radius; y++){
-		for(int x = centerx - radius; x<= centerx + radius; x++){
+		for(int x = centerx - radius; x <= centerx + radius; x++){
 
 			if(y < 0 || x < 0 || x >= appWidth || y >= appHeight) 
 				continue;
@@ -92,7 +92,7 @@ void CatPictureApp::tint(uint8_t* pixels){
 
 void CatPictureApp::gradient(uint8_t* pixels, int x, int y){
 	
-	Color8u c = Color8u(0,0,0);
+	Color8u c = Color8u(0, 0, 0);
 	
 	for(int y = 0; y < textureSize; y++){
 		for(int x = 0; x < appWidth; x++){
@@ -143,9 +143,9 @@ void CatPictureApp::update()
 {
 	
 	uint8_t* pixelArray = (*mySurface_).getData();
-	gradient(pixelArray,0,0);
+	gradient(pixelArray, 0, 0);
 	rectangle(pixelArray, 100, 200, 100, 200, Color8u(255,0,0));
-	circle(pixels, 5, 150, 150);
+	//circle(pixels, 250, 600, 600);
 	//tint(pixelArray);
 	
 }
