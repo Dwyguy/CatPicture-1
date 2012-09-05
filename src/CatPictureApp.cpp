@@ -36,16 +36,17 @@ class CatPictureApp : public AppBasic {
 	void gradient(uint8_t* pixels, int x, int y);
 	void tint(uint8_t* pixels);
 	void circle(uint8_t* pixels, int radius, int centerx, int centery);
-	  
+	void triangle(uint8_t* pixels, int length, int x, int y, Color8u c);
 };
 
 void CatPictureApp::prepareSettings(Settings* settings){
+
 	(*settings).setWindowSize(appWidth,appHeight);
 	(*settings).setResizable(false);
 }
 
-void CatPictureApp::setup()
-{
+void CatPictureApp::setup(){
+
 	Surface cat_picture(loadImage( loadResource(RES_SNOWBOARD) ));
 	mySurface_ = new Surface(textureSize,textureSize,false);
 	myTexture_ = new gl::Texture(*mySurface_);
@@ -77,18 +78,27 @@ void CatPictureApp::circle(uint8_t* pixels, int radius, int centerx, int centery
 	}
 }
 
-void CatPictureApp::tint(uint8_t* pixels){
+void CatPictureApp::triangle(uint8_t* pixels, int length, int x, int y, Color8u c){
 
+	if((x + length) <= appWidth){
 
-	for(int y = 0; y < textureSize; y++){
-		for(int x = 0; x < textureSize; x++){
-		pixels[(3 * x) + (y * textureSize * 3 )];  //work on this later
-		pixels[(3 * x) + (y * textureSize * 3) + 1];
-		pixels[(3 * x) + (y * textureSize * 3) + 2];
+		int height = length;
+
+		for(int count1 = 0; count1 <= height; count1++){
+			for(int count2 = 0; count2 <= length; count2++){
+
+		        pixels[(3 * x) + (y * textureSize * 3 )] = c.r;
+		        pixels[(3 * x) + (y * textureSize * 3 ) + 1] = c.g;
+		        pixels[(3 * x) + (y * textureSize * 3 ) + 2] = c.b;
+		        x++;
+	        }
+			x = x - length;
+			length = length - 2;
+			y--;
 		}
-	}
-
+    }
 }
+
 
 void CatPictureApp::gradient(uint8_t* pixels, int x, int y){
 	
@@ -135,23 +145,19 @@ void CatPictureApp::rectangle(uint8_t* pixels, int x1, int x2, int y1, int y2, C
 	}
 }
 
-void CatPictureApp::mouseDown( MouseEvent event )
-{
+void CatPictureApp::mouseDown( MouseEvent event ){
 }
 
-void CatPictureApp::update()
-{
-	
+void CatPictureApp::update(){
+
 	uint8_t* pixelArray = (*mySurface_).getData();
 	gradient(pixelArray, 0, 0);
 	rectangle(pixelArray, 100, 200, 100, 200, Color8u(255,0,0));
 	circle(pixelArray, 100, 700, 100);
-	//tint(pixelArray);
-	
+	triangle(pixelArray, 100, 400, 400, Color8u(255, 0, 0));
 }
 
-void CatPictureApp::draw()
-{
+void CatPictureApp::draw(){
 	
 	gl::draw(*mySurface_);
 	
