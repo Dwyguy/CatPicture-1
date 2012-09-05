@@ -201,14 +201,15 @@ void CatPictureApp::update(){
 
 	circle(pixelArray, 25, movingx, movingy, Color(255, 255, 255));
 
-	if((movingx < (appWidth - 25)) && (movingy < (appHeight - 25))) 
-		movingx = movingx + 25;
-	else if((movingx == (appWidth - 25)) && (movingy < (appHeight - 25))) 
+	if((movingx == 25) && (movingy < (appHeight - 25)))
 		movingy = movingy + 25;
-	else if((movingx <= (appWidth - 25)) && (movingy == (appHeight - 25)))
-		movingx = movingx - 25;
-	else
-		movingy = movingy - 25; 
+	else if((movingx < (appWidth - 25)) && (movingy == appHeight - 25))
+		movingx = movingx + 25;
+	else if((movingx == (appWidth - 25)) && (movingy >= 50))
+		movingy = movingy -25;
+	else 
+		movingx = movingx -25;
+	
 }
 
 void CatPictureApp::draw(){
