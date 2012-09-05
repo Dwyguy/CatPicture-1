@@ -35,6 +35,7 @@ class CatPictureApp : public AppBasic {
 	void rectangle(uint8_t* pixels, int x1, int x2, int y1, int y2, Color8u c);
 	void gradient(uint8_t* pixels, int x, int y);
 	void tint(uint8_t* pixels);
+	void circle(uint8_t* pixels, int radius, int centerx, int centery);
 	  
 };
 
@@ -52,12 +53,36 @@ void CatPictureApp::setup()
 	
 }
 
+void CatPictureApp::circle(uint8_t* pixels, int radius, int centerx, int centery){
+
+	Color8u c = Color8u(0,255,0);
+
+	if(radius < 0)
+		return;
+
+	for(int y = centery - radius; y <= centery + radius; y++){
+		for(int x = centerx - radius; x<= centerx + radius; x++){
+
+			if(y < 0 || x < 0 || x >= appWidth || y >= appHeight) 
+				continue;
+
+			int distance = (int) sqrt(pow((x - centerx), 2.0)  + pow((y - centery), 2.0));
+
+			if(distance <= radius){
+				pixels[3 * (x + y * textureSize)] = c.r;
+				pixels[3 * (x + y * textureSize) + 1] = c.g;
+				pixels[3 * (x + y * textureSize) + 2] = c.b;
+			}
+		}
+	}
+}
+
 void CatPictureApp::tint(uint8_t* pixels){
 
 
 	for(int y = 0; y < textureSize; y++){
 		for(int x = 0; x < textureSize; x++){
-		pixels[(3 * x) + (y * textureSize * 3 )];
+		pixels[(3 * x) + (y * textureSize * 3 )];  //work on this later
 		pixels[(3 * x) + (y * textureSize * 3) + 1];
 		pixels[(3 * x) + (y * textureSize * 3) + 2];
 		}
@@ -120,6 +145,7 @@ void CatPictureApp::update()
 	uint8_t* pixelArray = (*mySurface_).getData();
 	gradient(pixelArray,0,0);
 	rectangle(pixelArray, 100, 200, 100, 200, Color8u(255,0,0));
+	circle(pixels, 5, 150, 150);
 	//tint(pixelArray);
 	
 }
