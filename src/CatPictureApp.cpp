@@ -34,8 +34,7 @@ class CatPictureApp : public AppBasic {
 	static const int textureSize=1024;
 	void rectangle(uint8_t* pixels, int x1, int x2, int y1, int y2, Color8u c);
 	void gradient(uint8_t* pixels, int x, int y);
-	void tint(uint8_t* pixels);
-	void circle(uint8_t* pixels, int radius, int centerx, int centery);
+	void circle(uint8_t* pixels, int radius, int centerx, int centery, Color8u c);
 	void triangle(uint8_t* pixels, int length, int x, int y, Color8u c);
 };
 
@@ -54,9 +53,7 @@ void CatPictureApp::setup(){
 	
 }
 
-void CatPictureApp::circle(uint8_t* pixels, int radius, int centerx, int centery){
-
-	Color8u c = Color8u(0, 255, 0);
+void CatPictureApp::circle(uint8_t* pixels, int radius, int centerx, int centery, Color8u c){
 
 	if(radius <= 0)
 		return;
@@ -152,9 +149,14 @@ void CatPictureApp::update(){
 
 	uint8_t* pixelArray = (*mySurface_).getData();
 	gradient(pixelArray, 0, 0);
-	rectangle(pixelArray, 100, 200, 100, 200, Color8u(255,0,0));
-	circle(pixelArray, 100, 700, 100);
-	triangle(pixelArray, 100, 400, 400, Color8u(255, 0, 0));
+	triangle(pixelArray, 175, 370, 170, Color8u(175, 175, 175)); 
+	triangle(pixelArray, 175, 250, 170, Color8u(175, 175, 175));
+	circle(pixelArray, 175, 400, 300, Color8u(100, 100, 100));
+	triangle(pixelArray, 55, 375, 300, Color8u(30, 30, 30));
+	circle(pixelArray, 30, 250, 225, Color8u(70, 255, 70));
+	circle(pixelArray, 40, 550, 225, Color8u(70, 255, 70));
+	rectangle(pixelArray, 495, 520, 400, 450,Color8u(255,0,0));
+	rectangle(pixelArray, 300, 525, 375, 400, Color8u(255,0,0));
 }
 
 void CatPictureApp::draw(){
