@@ -145,7 +145,7 @@ void CatPictureApp::update()
 	uint8_t* pixelArray = (*mySurface_).getData();
 	gradient(pixelArray, 0, 0);
 	rectangle(pixelArray, 100, 200, 100, 200, Color8u(255,0,0));
-	//circle(pixels, 250, 600, 600);
+	circle(pixelArray, 100, 700, 100);
 	//tint(pixelArray);
 	
 }
