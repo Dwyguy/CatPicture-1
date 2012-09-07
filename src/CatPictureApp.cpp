@@ -238,11 +238,11 @@ void CatPictureApp::update(){
 			eyeColor++;
 	}*/
 
-	if(leftEyeSize < 40)
+	/*if(leftEyeSize < 40)
 		leftEyeSize++;
 	else
 		leftEyeSize = 30;
-	// animates size of left eye
+	// animates size of left eye*/
 
 	if(eyeColor <= 255 && eyeColor != 0)
 		eyeColor--;
@@ -250,10 +250,10 @@ void CatPictureApp::update(){
 		eyeColor = 255;
 	// animates color of both eyes
 
-	if(rightEyeSize > 30)
+	/*if(rightEyeSize > 30)
 		rightEyeSize--;
 	else
-		rightEyeSize = 40;
+		rightEyeSize = 40;*/
 	// animates size of right eye
 
 	// Matt: This large portion here could be put into a seperate method called
