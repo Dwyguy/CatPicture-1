@@ -34,9 +34,18 @@ class CatPictureApp : public AppBasic {
 	int eyeColor;
 	int movingx;
 	int movingy;
+	bool rightEyeGetSmaller;
+	bool leftEyeGetSmaller;
+	bool colorSmaller;
 	static const int appWidth=800;
 	static const int appHeight=600;
 	static const int textureSize=1024;
+
+	// Matt: As a general note, you should document each of the functions
+	// either up here in the class or at each point in the program.  Also,
+	// you may want to rename your functions to reflect their "action" status;
+	// they can have names like "drawCircle" instead of just circle
+	
 	void rectangle(uint8_t* pixels, int x1, int x2, int y1, int y2, Color8u c);
 	void gradient(uint8_t* pixels, int x, int y);
 	void circle(uint8_t* pixels, int radius, int centerx, int centery, Color8u c);
@@ -54,12 +63,15 @@ void CatPictureApp::setup(){
 
 	mySurface_ = new Surface(textureSize,textureSize,false);
 	myTexture_ = new gl::Texture(*mySurface_);
-	uint8_t* pixelArray = (*mySurface_).getData();
+	uint8_t* pixelArray = (*mySurface_).getData(); // Matt: This line is not needed
 	leftEyeSize = 30;
 	rightEyeSize = 40;
 	eyeColor = 255;
 	movingx = 25;
 	movingy = 25;
+	rightEyeGetSmaller = true;
+	leftEyeGetSmaller = false;
+	colorSmaller = true;
 	
 }
 
@@ -68,6 +80,7 @@ void CatPictureApp::circle(uint8_t* pixels, int radius, int centerx, int centery
 	if(radius <= 0) 
 		return;
 
+	// Matt: Good spacing in this loop. Everything is clear
 	for(int y = centery - radius; y <= centery + radius; y++){
 		// starts from top of circle
 		for(int x = centerx - radius; x <= centerx + radius; x++){
@@ -170,6 +183,61 @@ void CatPictureApp::mouseDown( MouseEvent event ){
 
 void CatPictureApp::update(){
 
+	// Matt: I added the following code to make the transition from
+	// small to large on the eyes smooth instead of a "chop".  I did
+	// something similar with the eye color.
+	if(leftEyeGetSmaller)
+	{
+		leftEyeSize--;
+		if(leftEyeSize == 30) // The smallest size it will get
+			leftEyeGetSmaller = false;
+	}
+	else
+	{
+		leftEyeSize++;
+		if(leftEyeSize == 40)// The largest size it will get
+			leftEyeGetSmaller = true;
+	}
+
+	if(rightEyeGetSmaller)
+	{
+		rightEyeSize--;
+		if(rightEyeSize == 30) // The smallest size it will get
+			rightEyeGetSmaller = false;
+	}
+	else
+	{
+		rightEyeSize++;
+		if(rightEyeSize == 40)// The largest size it will get
+			rightEyeGetSmaller = true;
+	}
+
+	// Matt: I tried to fix the eye color being choppy as well,
+	// but for whatever reason it wouldn't work.  I'll leave my code
+	// here in case it gives you any ideas.
+	/*if(colorSmaller && eyeColor > 0)
+	{
+		//eyeColor--;
+		if(eyeColor < 1)
+		{
+			//eyeColor = 0;
+			colorSmaller == false;
+		}
+		else
+			eyeColor--;
+	}
+	else
+	{
+		//eyeColor++;
+		if(eyeColor > 254)
+		{
+			//eyeColor = 255;
+			colorSmaller == true;
+		}
+		else
+			eyeColor++;
+	}*/
+
 	if(leftEyeSize < 40)
 		leftEyeSize++;
 	else
@@ -188,6 +256,8 @@ void CatPictureApp::update(){
 		rightEyeSize = 40;
 	// animates size of right eye
 
+	// Matt: This large portion here could be put into a seperate method called
+	// "drawCat" or something like that to save some space in your update function.
 	uint8_t* pixelArray = (*mySurface_).getData();
 	gradient(pixelArray, 0, 0);
 	triangle(pixelArray, 230, 350, 170, Color8u(175, 175, 175)); // right ear
